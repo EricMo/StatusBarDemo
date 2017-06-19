@@ -15,6 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
+            android:theme="@style/noAnimation"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,7 +28,7 @@
         <activity android:name=".ui.BankCardActivity">
         </activity>
         <activity android:name=".ui.PhotoDetailActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+            android:theme="@style/noAnimation"/>
     </application>
 
 </manifest>

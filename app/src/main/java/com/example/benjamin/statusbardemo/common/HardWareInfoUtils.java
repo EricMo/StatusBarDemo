@@ -20,7 +20,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by wangf on 2016/2/22.
@@ -45,5 +48,19 @@ public class HardWareInfoUtils {
                             "dimen", "android"));
         }
         return STATUS_BAR_HEIGHT;
+    }
+
+
+    public static Map<String, Object> getScreenIno(Context mContext) {
+        Resources resources = mContext.getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        float density = dm.density;
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        Map<String, Object> info = new HashMap<>();
+        info.put("density", density);
+        info.put("width", width);
+        info.put("height", height);
+        return info;
     }
 }
