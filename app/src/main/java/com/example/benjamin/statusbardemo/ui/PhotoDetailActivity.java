@@ -5,6 +5,7 @@ import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 
@@ -13,6 +14,7 @@ import com.example.benjamin.statusbardemo.R;
 import com.example.benjamin.statusbardemo.common.TestImageUriApi;
 import com.github.chrisbanes.photoview.OnSingleFlingListener;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.orhanobut.logger.Logger;
 
 /**
  * Created by Benjamin on 2017/6/14.
@@ -22,6 +24,8 @@ public class PhotoDetailActivity extends FragmentActivity {
     private PhotoView photoDetail;
     private VelocityTracker velocityTracker;
     private float downY; //X/Y方向速度相关的帮助类
+    private float distance = 0;
+    private float distanceThreshold = 20;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +39,7 @@ public class PhotoDetailActivity extends FragmentActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
+        switch (event.getAction() & event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 //获取当前点击的Y轴方向
                 downY = event.getY();
@@ -43,15 +47,19 @@ public class PhotoDetailActivity extends FragmentActivity {
                 velocityTracker.addMovement(event);
                 break;
             case MotionEvent.ACTION_MOVE:
+                float cDistance = Math.abs(event.getY() - downY);
                 //当图片的缩放率为1的时候（也就是原图状态），图片跟着手指移动
-                if (photoDetail.getScale() == 1 && event.getPointerCount() == 1) {
+                if (photoDetail.getScale() == 1 && Math.abs(cDistance - distance) > distanceThreshold) {
                     photoDetail.setTranslationY(event.getY() - downY);
                     velocityTracker.addMovement(event);
-                    return true;
+                    distance = cDistance;
+                    return false;
                 } else {
+                    distance = cDistance;
                     //有缩放率的时候交给父类处理
                     return super.dispatchTouchEvent(event);
                 }
+
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 if (event.getPointerCount() == 1) {
@@ -69,6 +77,5 @@ public class PhotoDetailActivity extends FragmentActivity {
         }
         return super.dispatchTouchEvent(event);
     }
-
 
 }
