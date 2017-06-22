@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.photoDetailExit:
-                startActivity(new Intent(this, PhotoDetailActivity.class));
+                startActivity(new Intent(this, PhotoDetailWithViewPagerActivity.class));
                 break;
         }
     }
