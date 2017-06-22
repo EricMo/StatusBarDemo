@@ -102,23 +102,21 @@ public class PhotoDetailWithViewPagerActivity extends FragmentActivity {
                 //如果当前显示的图片的缩放率为1（也就是没进行缩放），那么则有滑动歧义
                 if (photoAdapter.getCurrentView().getScale() == 1) {
                     //当次数满足以后，则不再进行判断||当当前的手指在Y轴的上下偏移量小于固定阈值，说明满足横向滑动
-                    if (isNeed && (Math.abs(event.getY(0) - cDownY) < HORIZONTALOFFSET)) {
+                    if (Math.abs(event.getY(0) - cDownY) < HORIZONTALOFFSET) {
+                        cDownY = event.getY(0);
                         isHorizontal = true;
-                    }
-                    if (!isHorizontal && (event.getPointerCount() == 1 || offset < DISTANCEOFFSET)) {
+                    } else if ((event.getPointerCount() == 1 || offset < DISTANCEOFFSET)) {
                         //如果当前是一根手指在滑动||在Y轴的滑动偏移量小于Y轴偏移量阈值，就认为是上下滑动
                         photoContainer.setTranslationY(event.getY() - downY);
                         velocityTracker.addMovement(event);
                         return false;
                     }
-                    isNeed = false;
                 }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_POINTER_UP:
-                //如果不是横向滑动
-                if (!isHorizontal) {
+
                     //当手指抬起或者动作取消的时候应该处理的事情
                     velocityTracker.computeCurrentVelocity(500);
                     //此处获取图片在Y轴的偏移量，大于
@@ -160,7 +158,7 @@ public class PhotoDetailWithViewPagerActivity extends FragmentActivity {
                     //重置shake变量
                     isHorizontal = false;
                     isNeed = true;
-                }
+
         }
         return super.dispatchTouchEvent(event);
     }
